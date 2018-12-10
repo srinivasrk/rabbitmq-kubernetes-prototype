@@ -1,4 +1,4 @@
-# Spawn new workers in Kubernetes when new messages are generated in RABBITMQ
+# Spawn workers in Kubernetes interacting with RabbitMQ
 
 Using similar structure but made changes as and when required
 https://kubernetes.io/docs/tasks/job/coarse-parallel-processing-work-queue/
