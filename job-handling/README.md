@@ -66,7 +66,7 @@ https://kubernetes.io/docs/tasks/job/coarse-parallel-processing-work-queue/
     Keep this terminal running.
 
 
-3.  Worker is defined in ./worker-image/worker.py, it used PIKA to read messages from the rabbitmq service. The Dockerfile will create a image which can then be pushed to docker hub or google container registry.
+3.  Worker is defined in ./worker-image/worker.py, it uses PIKA to read messages from the rabbitmq service. The Dockerfile will create a image which can then be pushed to docker hub or google container registry.
     In another terminal
     ```
     # cd  worker-image
