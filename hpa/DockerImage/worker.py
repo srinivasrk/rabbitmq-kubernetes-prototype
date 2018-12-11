@@ -45,6 +45,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
+    print("Hello World : GET REQUEST RECEIVED")
     try:
         return receive_message()
         sys.exit()
