@@ -21,8 +21,8 @@ def receive_message():
     connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq-service", 5672, '/', credentials))
     channel = connection.channel()
 
-    channel.queue_declare(queue=os.environ['QUEUE'], durable=True)
-    print(" Worker Spwaning")
+    channel.queue_declare(queue='hpa-custom', durable=True)
+    print("Worker Spwaning")
     def callback(ch, method, properties, body):
         print(" [x] Received %r" % body)
         i = random.randint(100, 300) # generate a random number b/w 1000 and 9999
@@ -31,11 +31,11 @@ def receive_message():
         time.sleep(2)
         print(" [x] Done")
         ch.basic_ack(delivery_tag=method.delivery_tag)
-        return 200
+        return "done"
 
     # send ack
     channel.basic_consume(callback,
-                          queue=os.environ['QUEUE'])
+                          queue='hpa-custom')
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
@@ -45,14 +45,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    print("Hello World : GET REQUEST RECEIVED")
     try:
-        return receive_message()
-        sys.exit()
+        receive_message()
+        return "Done"
     except:
+        e = sys.exc_info()[0]
+        print(e)
         print("Error")
         sys.exit()
-
-
-
-app.run(debug=True)
