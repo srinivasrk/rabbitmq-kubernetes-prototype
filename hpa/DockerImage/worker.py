@@ -53,3 +53,5 @@ def hello_world():
         print(e)
         print("Error")
         sys.exit()
+
+app.run(debug=True)
