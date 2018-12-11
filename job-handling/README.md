@@ -4,9 +4,11 @@ Using similar structure but made changes as and when required
 https://kubernetes.io/docs/tasks/job/coarse-parallel-processing-work-queue/
 
 # Introduction:
-    In this example we will create a rabbitmq replication controller and a Kubernetes [Job](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)  which handles 2 messages in parallel, spawning new "PODS" with each message. The PODS reads messages from the rabbitmq server and sends acknowledgement back.
 
-    We will use a temporary container which acts as a client which sends message to rabbitmq as needed.
+   In this example we will create a rabbitmq replication controller and a Kubernetes [Job](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)  which handles 2 messages in parallel, spawning new "PODS" with each message. The PODS reads messages from the rabbitmq server and sends acknowledgement back.
+
+   We will use a temporary container which acts as a client which sends message to rabbitmq as needed.
+    
 
 # Pre-reqs
 
@@ -64,7 +66,7 @@ https://kubernetes.io/docs/tasks/job/coarse-parallel-processing-work-queue/
     Keep this terminal running.
 
 
-3.  Worker is defined in ./worker-image/worker.py, it used PIKA to read messages from the rabbitmq service. The Dockerfile will create a image which can then be pushed to docker hub or google container registry.
+3.  Worker is defined in ./worker-image/worker.py, it uses PIKA to read messages from the rabbitmq service. The Dockerfile will create a image which can then be pushed to docker hub or google container registry.
     In another terminal
     ```
     # cd  worker-image
