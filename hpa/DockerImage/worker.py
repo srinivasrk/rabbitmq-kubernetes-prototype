@@ -4,6 +4,8 @@ import os
 import time
 import sys
 import random
+from flask import Flask
+from flask_restful import Api, Resource, reqparse
 
 def recur_fibo(n):
    """Recursive function to
@@ -29,7 +31,7 @@ def receive_message():
         time.sleep(2)
         print(" [x] Done")
         ch.basic_ack(delivery_tag=method.delivery_tag)
-        sys.exit()
+        return 200
 
     # send ack
     channel.basic_consume(callback,
@@ -39,4 +41,17 @@ def receive_message():
     channel.start_consuming()
 
 
-receive_message()
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    try:
+        return receive_message()
+        sys.exit()
+    except:
+        print("Error")
+        sys.exit()
+
+
+
+app.run(debug=True)
