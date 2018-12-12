@@ -4,6 +4,11 @@ const port = 3000
 var amqp = require('amqplib');
 
 
+function fibo(n) {
+  if (n < 2)
+     return 1;
+  else   return fibo(n - 2) + fibo(n - 1);
+}
 
 amqp.connect({
   protocol: 'amqp',
@@ -21,7 +26,7 @@ amqp.connect({
 
       ch.consume(q.queue, function(msg) {
         console.log(" [x] Received %s", msg.content.toString());
-        res.send('Hello World!')
+        res.end(`${fibo(30)}`)
       }, {noAck: false})
     });
   });
