@@ -3,15 +3,14 @@ const app = express()
 const port = 3000
 var amqp = require('amqplib');
 
-app.get('/', (req, res) => {
-  console.log("GET : Request received")
 
-  amqp.connect({
+
+amqp.connect({
   protocol: 'amqp',
-  hostname: `${process.env.RABBITMQ_SERVER}`,
+  hostname: `rabbitmq-service`,
   port: 5672,
-  username: 'srini',
-  password: 'srini',
+  username: 'guest',
+  password: 'guest',
   locale: 'en_US',
   frameMax: 0,
   heartbeat: 0
@@ -27,7 +26,3 @@ app.get('/', (req, res) => {
     });
   });
 });
-
-})
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
