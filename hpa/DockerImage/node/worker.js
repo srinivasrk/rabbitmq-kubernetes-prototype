@@ -26,7 +26,8 @@ amqp.connect({
 
       ch.consume(q.queue, function(msg) {
         console.log(" [x] Received %s", msg.content.toString());
-        res.end(`${fibo(30)}`)
+        fibo(30)
+        process.exit()
       }, {noAck: false})
     });
   });
