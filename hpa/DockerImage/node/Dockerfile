@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 RUN apt-get update && \
-    apt-get install -y curl ca-certificates amqp-tools \
+    apt-get install -y curl ca-certificates amqp-tools gnupg \
        --no-install-recommends
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
