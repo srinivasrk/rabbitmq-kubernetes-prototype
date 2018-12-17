@@ -13,3 +13,5 @@ def work(context, inputs, parameters, responder):
     # new_task['specificdetails'] = yadayada
     # chipper.work_enqueue(new_task)
     return {'status':'ok'}
+
+print("Calling worker script")

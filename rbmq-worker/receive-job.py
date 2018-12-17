@@ -1,7 +1,16 @@
 import pika
 import os
 import time
+import gridfs
+import pymongo
+import json
 
+def connectToDB():
+    client = pymongo.MongoClient('mongodb://'+os.environ['RABBITMQ_SERVER'])
+    db = client.inputFiles
+    collection = db.inputFiles
+    fs = gridfs.GridFS(db)
+    return db, collection, fs
 
 def do_work(message):
     # the message is of the form
@@ -22,6 +31,17 @@ def do_work(message):
         }
     }
     '''
+    parsed_message = json.loads(message)
+    print(parsed_message)
+    db, collection, fs = connectToDB()
+    file = fs.find_one({"filename": "input_script.py"})
+    if file:
+        # read the file from gridfs and do work
+        worker = fs.get(file._id)
+        f = open("temp-worker.py", "wb")
+        f.write(worker.read())
+        # once the temp file is created run the importlib.util.module_from_spec to run the script
+
 
 
 def receive_message():
