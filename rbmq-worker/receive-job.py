@@ -4,6 +4,14 @@ import time
 import gridfs
 import pymongo
 import json
+import importlib.util
+from runpy import run_path
+
+def load_local(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    my_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(my_module)
+    return my_module
 
 def connectToDB():
     client = pymongo.MongoClient('mongodb://'+os.environ['RABBITMQ_SERVER'])
@@ -32,7 +40,7 @@ def do_work(message):
     }
     '''
     parsed_message = json.loads(message)
-    print(parsed_message)
+
     db, collection, fs = connectToDB()
     file = fs.find_one({"filename": "input_script.py"})
     if file:
@@ -40,9 +48,14 @@ def do_work(message):
         worker = fs.get(file._id)
         f = open("temp-worker.py", "wb")
         f.write(worker.read())
+        f.close()
         # once the temp file is created run the importlib.util.module_from_spec to run the script
-
-
+        worker = load_local("my-worker", "./temp-worker.py")
+        print(dir(worker))
+        print(worker.__name__)
+        print(worker.__loader__)
+        print(worker.__package__)
+        print(worker.__spec__)
 
 def receive_message():
     credentials = pika.PlainCredentials('srini', 'srini')
@@ -52,7 +65,7 @@ def receive_message():
     channel.queue_declare(queue='tasks', durable=True)
 
     def callback(ch, method, properties, body):
-        print(" [x] Received %r" % body)
+        print(" [x] Received ")
         do_work(body)
         print(" [x] Done")
         ch.basic_ack(delivery_tag=method.delivery_tag)
