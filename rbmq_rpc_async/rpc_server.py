@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='localhost'))
+credentials = pika.PlainCredentials('srini', 'srini')
+connection = pika.BlockingConnection(pika.ConnectionParameters(os.environ['RABBITMQ_SERVER'], 5672,
+                                                                    '/', credentials))
 
 channel = connection.channel()
 

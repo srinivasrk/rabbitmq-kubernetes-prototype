@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 import pika
 import uuid
+import os
 
 class FibonacciRpcClient(object):
     def __init__(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-                host='localhost'))
+        credentials = pika.PlainCredentials('srini', 'srini')
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(os.environ['RABBITMQ_SERVER'], 5672,
+                                                                       '/', credentials))
 
         self.channel = self.connection.channel()
 
@@ -19,11 +21,10 @@ class FibonacciRpcClient(object):
         print(body)
 
     def call(self, n):
-        self.response = None
         self.channel.basic_publish(exchange='',
                                    routing_key='rpc_queue',
                                    properties=pika.BasicProperties(
-                                         reply_to = self.callback_queue
+                                         reply_to=self.callback_queue
                                          ),
                                    body=str(n))
 
