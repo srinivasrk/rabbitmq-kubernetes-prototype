@@ -9,6 +9,7 @@ class FibonacciRpcClient(object):
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(os.environ['RABBITMQ_SERVER'], 5672,
                                                                        '/', credentials))
 
+
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(exclusive=True)
@@ -31,7 +32,7 @@ class FibonacciRpcClient(object):
 
 fibonacci_rpc = FibonacciRpcClient()
 
-print(" [x] Requesting fib(30)")
 fibonacci_rpc.call(30)
 fibonacci_rpc.call(10)
 fibonacci_rpc.call(5)
+fibonacci_rpc.channel.start_consuming()
